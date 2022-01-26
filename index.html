@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/ProcessosdepesquisaSIGMINE2021_1.js"></script>
+        <script src="data/RequerimentodeexploraoSIGMINE2021_2.js"></script>
+        <script src="data/LavraautorizadaSIGMINE2021_3.js"></script>
+        <script src="data/PrincipaiscursosdguadeMinasGerais_4.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:20, minZoom:4
+        }).fitBounds([[-20.679279509225587,-44.73013175462029],[-19.582866819780595,-42.7034295104948]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Voyager_0');
+        map.getPane('pane_Voyager_0').style.zIndex = 400;
+        var layer_Voyager_0 = L.tileLayer('https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=1LQvSPTH3Gy9rNJIed2x', {
+            pane: 'pane_Voyager_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 4,
+            maxZoom: 20,
+            minNativeZoom: 0,
+            maxNativeZoom: 18
+        });
+        layer_Voyager_0;
+        map.addLayer(layer_Voyager_0);
+        function pop_ProcessosdepesquisaSIGMINE2021_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PROCESSO</th>\
+                        <td>' + (feature.properties['PROCESSO'] !== null ? autolinker.link(feature.properties['PROCESSO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NUMERO</th>\
+                        <td>' + (feature.properties['NUMERO'] !== null ? autolinker.link(feature.properties['NUMERO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ANO</th>\
+                        <td>' + (feature.properties['ANO'] !== null ? autolinker.link(feature.properties['ANO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_HA</th>\
+                        <td>' + (feature.properties['AREA_HA'] !== null ? autolinker.link(feature.properties['AREA_HA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ID</th>\
+                        <td>' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FASE</th>\
+                        <td>' + (feature.properties['FASE'] !== null ? autolinker.link(feature.properties['FASE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ULT_EVENTO</th>\
+                        <td>' + (feature.properties['ULT_EVENTO'] !== null ? autolinker.link(feature.properties['ULT_EVENTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOME</th>\
+                        <td>' + (feature.properties['NOME'] !== null ? autolinker.link(feature.properties['NOME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SUBS</th>\
+                        <td>' + (feature.properties['SUBS'] !== null ? autolinker.link(feature.properties['SUBS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">USO</th>\
+                        <td>' + (feature.properties['USO'] !== null ? autolinker.link(feature.properties['USO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">UF</th>\
+                        <td>' + (feature.properties['UF'] !== null ? autolinker.link(feature.properties['UF'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DSProcesso</th>\
+                        <td>' + (feature.properties['DSProcesso'] !== null ? autolinker.link(feature.properties['DSProcesso'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ProcessosdepesquisaSIGMINE2021_1_0(feature) {
+            if (feature.properties['ANO'] >= 1935.000000 && feature.properties['ANO'] <= 1975.000000 ) {
+                return {
+                pane: 'pane_ProcessosdepesquisaSIGMINE2021_1',
+                opacity: 1,
+                color: 'rgba(253,202,111,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,202,111,0.5019607843137255)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 1975.000000 && feature.properties['ANO'] <= 1998.000000 ) {
+                return {
+                pane: 'pane_ProcessosdepesquisaSIGMINE2021_1',
+                opacity: 1,
+                color: 'rgba(254,187,89,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,187,89,0.5411764705882353)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 1998.000000 && feature.properties['ANO'] <= 2007.000000 ) {
+                return {
+                pane: 'pane_ProcessosdepesquisaSIGMINE2021_1',
+                opacity: 1,
+                color: 'rgba(254,172,66,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,172,66,0.5803921568627451)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 2007.000000 && feature.properties['ANO'] <= 2012.000000 ) {
+                return {
+                pane: 'pane_ProcessosdepesquisaSIGMINE2021_1',
+                opacity: 1,
+                color: 'rgba(255,157,44,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,157,44,0.6235294117647059)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 2012.000000 && feature.properties['ANO'] <= 2017.000000 ) {
+                return {
+                pane: 'pane_ProcessosdepesquisaSIGMINE2021_1',
+                opacity: 1,
+                color: 'rgba(255,142,22,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,142,22,0.6627450980392157)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 2017.000000 && feature.properties['ANO'] <= 2021.000000 ) {
+                return {
+                pane: 'pane_ProcessosdepesquisaSIGMINE2021_1',
+                opacity: 1,
+                color: 'rgba(255,127,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,127,0,0.7019607843137254)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_ProcessosdepesquisaSIGMINE2021_1');
+        map.getPane('pane_ProcessosdepesquisaSIGMINE2021_1').style.zIndex = 401;
+        map.getPane('pane_ProcessosdepesquisaSIGMINE2021_1').style['mix-blend-mode'] = 'normal';
+        var layer_ProcessosdepesquisaSIGMINE2021_1 = new L.geoJson(json_ProcessosdepesquisaSIGMINE2021_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ProcessosdepesquisaSIGMINE2021_1',
+            layerName: 'layer_ProcessosdepesquisaSIGMINE2021_1',
+            pane: 'pane_ProcessosdepesquisaSIGMINE2021_1',
+            onEachFeature: pop_ProcessosdepesquisaSIGMINE2021_1,
+            style: style_ProcessosdepesquisaSIGMINE2021_1_0,
+        });
+        bounds_group.addLayer(layer_ProcessosdepesquisaSIGMINE2021_1);
+        function pop_RequerimentodeexploraoSIGMINE2021_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PROCESSO</th>\
+                        <td>' + (feature.properties['PROCESSO'] !== null ? autolinker.link(feature.properties['PROCESSO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NUMERO</th>\
+                        <td>' + (feature.properties['NUMERO'] !== null ? autolinker.link(feature.properties['NUMERO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ANO</th>\
+                        <td>' + (feature.properties['ANO'] !== null ? autolinker.link(feature.properties['ANO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_HA</th>\
+                        <td>' + (feature.properties['AREA_HA'] !== null ? autolinker.link(feature.properties['AREA_HA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ID</th>\
+                        <td>' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FASE</th>\
+                        <td>' + (feature.properties['FASE'] !== null ? autolinker.link(feature.properties['FASE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ULT_EVENTO</th>\
+                        <td>' + (feature.properties['ULT_EVENTO'] !== null ? autolinker.link(feature.properties['ULT_EVENTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOME</th>\
+                        <td>' + (feature.properties['NOME'] !== null ? autolinker.link(feature.properties['NOME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SUBS</th>\
+                        <td>' + (feature.properties['SUBS'] !== null ? autolinker.link(feature.properties['SUBS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">USO</th>\
+                        <td>' + (feature.properties['USO'] !== null ? autolinker.link(feature.properties['USO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">UF</th>\
+                        <td>' + (feature.properties['UF'] !== null ? autolinker.link(feature.properties['UF'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DSProcesso</th>\
+                        <td>' + (feature.properties['DSProcesso'] !== null ? autolinker.link(feature.properties['DSProcesso'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_RequerimentodeexploraoSIGMINE2021_2_0(feature) {
+            if (feature.properties['ANO'] >= 1930.000000 && feature.properties['ANO'] <= 1960.000000 ) {
+                return {
+                pane: 'pane_RequerimentodeexploraoSIGMINE2021_2',
+                opacity: 1,
+                color: 'rgba(247,128,128,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,128,128,0.5215686274509804)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 1960.000000 && feature.properties['ANO'] <= 1980.000000 ) {
+                return {
+                pane: 'pane_RequerimentodeexploraoSIGMINE2021_2',
+                opacity: 1,
+                color: 'rgba(242,103,103,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(242,103,103,0.5411764705882353)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 1980.000000 && feature.properties['ANO'] <= 2000.000000 ) {
+                return {
+                pane: 'pane_RequerimentodeexploraoSIGMINE2021_2',
+                opacity: 1,
+                color: 'rgba(237,77,78,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,77,78,0.5607843137254902)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 2000.000000 && feature.properties['ANO'] <= 2020.000000 ) {
+                return {
+                pane: 'pane_RequerimentodeexploraoSIGMINE2021_2',
+                opacity: 1,
+                color: 'rgba(232,51,53,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,51,53,0.5803921568627451)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['ANO'] >= 2020.000000 && feature.properties['ANO'] <= 2021.000000 ) {
+                return {
+                pane: 'pane_RequerimentodeexploraoSIGMINE2021_2',
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,26,28,0.6)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_RequerimentodeexploraoSIGMINE2021_2');
+        map.getPane('pane_RequerimentodeexploraoSIGMINE2021_2').style.zIndex = 402;
+        map.getPane('pane_RequerimentodeexploraoSIGMINE2021_2').style['mix-blend-mode'] = 'normal';
+        var layer_RequerimentodeexploraoSIGMINE2021_2 = new L.geoJson(json_RequerimentodeexploraoSIGMINE2021_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_RequerimentodeexploraoSIGMINE2021_2',
+            layerName: 'layer_RequerimentodeexploraoSIGMINE2021_2',
+            pane: 'pane_RequerimentodeexploraoSIGMINE2021_2',
+            onEachFeature: pop_RequerimentodeexploraoSIGMINE2021_2,
+            style: style_RequerimentodeexploraoSIGMINE2021_2_0,
+        });
+        bounds_group.addLayer(layer_RequerimentodeexploraoSIGMINE2021_2);
+        function pop_LavraautorizadaSIGMINE2021_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">PROCESSO</th>\
+                        <td>' + (feature.properties['PROCESSO'] !== null ? autolinker.link(feature.properties['PROCESSO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NUMERO</th>\
+                        <td>' + (feature.properties['NUMERO'] !== null ? autolinker.link(feature.properties['NUMERO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ANO</th>\
+                        <td>' + (feature.properties['ANO'] !== null ? autolinker.link(feature.properties['ANO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_HA</th>\
+                        <td>' + (feature.properties['AREA_HA'] !== null ? autolinker.link(feature.properties['AREA_HA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ID</th>\
+                        <td>' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FASE</th>\
+                        <td>' + (feature.properties['FASE'] !== null ? autolinker.link(feature.properties['FASE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ULT_EVENTO</th>\
+                        <td>' + (feature.properties['ULT_EVENTO'] !== null ? autolinker.link(feature.properties['ULT_EVENTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOME</th>\
+                        <td>' + (feature.properties['NOME'] !== null ? autolinker.link(feature.properties['NOME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SUBS</th>\
+                        <td>' + (feature.properties['SUBS'] !== null ? autolinker.link(feature.properties['SUBS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">USO</th>\
+                        <td>' + (feature.properties['USO'] !== null ? autolinker.link(feature.properties['USO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">UF</th>\
+                        <td>' + (feature.properties['UF'] !== null ? autolinker.link(feature.properties['UF'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DSProcesso</th>\
+                        <td>' + (feature.properties['DSProcesso'] !== null ? autolinker.link(feature.properties['DSProcesso'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_LavraautorizadaSIGMINE2021_3_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_LavraautorizadaSIGMINE2021_3rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_LavraautorizadaSIGMINE2021_3',
+                opacity: 1,
+                color: 'rgba(209,170,130,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,170,130,0.5019607843137255)',
+                interactive: true,
+            };
+                }
+                else if (exp_LavraautorizadaSIGMINE2021_3rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_LavraautorizadaSIGMINE2021_3',
+                opacity: 1,
+                color: 'rgba(198,156,109,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(198,156,109,0.5019607843137255)',
+                interactive: true,
+            };
+                }
+                else if (exp_LavraautorizadaSIGMINE2021_3rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_LavraautorizadaSIGMINE2021_3',
+                opacity: 1,
+                color: 'rgba(166,124,82,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,124,82,0.5019607843137255)',
+                interactive: true,
+            };
+                }
+                else if (exp_LavraautorizadaSIGMINE2021_3rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_LavraautorizadaSIGMINE2021_3',
+                opacity: 1,
+                color: 'rgba(140,98,57,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(140,98,57,0.5019607843137255)',
+                interactive: true,
+            };
+                }
+                else if (exp_LavraautorizadaSIGMINE2021_3rule4_eval_expression(context)) {
+                  return {
+                pane: 'pane_LavraautorizadaSIGMINE2021_3',
+                opacity: 1,
+                color: 'rgba(117,76,36,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(117,76,36,0.5019607843137255)',
+                interactive: true,
+            };
+                }
+                else if (exp_LavraautorizadaSIGMINE2021_3rule5_eval_expression(context)) {
+                  return {
+                pane: 'pane_LavraautorizadaSIGMINE2021_3',
+                opacity: 1,
+                color: 'rgba(96,56,19,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(96,56,19,0.5019607843137255)',
+                interactive: true,
+            };
+                }
+                else if (exp_LavraautorizadaSIGMINE2021_3rule6_eval_expression(context)) {
+                  return {
+                pane: 'pane_LavraautorizadaSIGMINE2021_3',
+                opacity: 1,
+                color: 'rgba(66,33,11,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(66,33,11,0.5019607843137255)',
+                interactive: true,
+            };
+                }
+                else if (exp_LavraautorizadaSIGMINE2021_3rule7_eval_expression(context)) {
+                  return {
+                pane: 'pane_LavraautorizadaSIGMINE2021_3',
+                opacity: 1,
+                color: 'rgba(32,16,5,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(32,16,5,0.5019607843137255)',
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_LavraautorizadaSIGMINE2021_3');
+        map.getPane('pane_LavraautorizadaSIGMINE2021_3').style.zIndex = 403;
+        map.getPane('pane_LavraautorizadaSIGMINE2021_3').style['mix-blend-mode'] = 'normal';
+        var layer_LavraautorizadaSIGMINE2021_3 = new L.geoJson(json_LavraautorizadaSIGMINE2021_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_LavraautorizadaSIGMINE2021_3',
+            layerName: 'layer_LavraautorizadaSIGMINE2021_3',
+            pane: 'pane_LavraautorizadaSIGMINE2021_3',
+            onEachFeature: pop_LavraautorizadaSIGMINE2021_3,
+            style: style_LavraautorizadaSIGMINE2021_3_0,
+        });
+        bounds_group.addLayer(layer_LavraautorizadaSIGMINE2021_3);
+        map.addLayer(layer_LavraautorizadaSIGMINE2021_3);
+        function pop_PrincipaiscursosdguadeMinasGerais_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">ID</th>\
+                        <td>' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOME</th>\
+                        <td>' + (feature.properties['NOME'] !== null ? autolinker.link(feature.properties['NOME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NUORDEMCDA</th>\
+                        <td>' + (feature.properties['NUORDEMCDA'] !== null ? autolinker.link(feature.properties['NUORDEMCDA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NUNIVOTCDA</th>\
+                        <td>' + (feature.properties['NUNIVOTCDA'] !== null ? autolinker.link(feature.properties['NUNIVOTCDA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PrincipaiscursosdguadeMinasGerais_4_0() {
+            return {
+                pane: 'pane_PrincipaiscursosdguadeMinasGerais_4',
+                opacity: 1,
+                color: 'rgba(89,149,175,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PrincipaiscursosdguadeMinasGerais_4');
+        map.getPane('pane_PrincipaiscursosdguadeMinasGerais_4').style.zIndex = 404;
+        map.getPane('pane_PrincipaiscursosdguadeMinasGerais_4').style['mix-blend-mode'] = 'normal';
+        var layer_PrincipaiscursosdguadeMinasGerais_4 = new L.geoJson(json_PrincipaiscursosdguadeMinasGerais_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PrincipaiscursosdguadeMinasGerais_4',
+            layerName: 'layer_PrincipaiscursosdguadeMinasGerais_4',
+            pane: 'pane_PrincipaiscursosdguadeMinasGerais_4',
+            onEachFeature: pop_PrincipaiscursosdguadeMinasGerais_4,
+            style: style_PrincipaiscursosdguadeMinasGerais_4_0,
+        });
+        bounds_group.addLayer(layer_PrincipaiscursosdguadeMinasGerais_4);
+        map.addLayer(layer_PrincipaiscursosdguadeMinasGerais_4);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/PrincipaiscursosdguadeMinasGerais_4.png" /> Principais cursos d\'água de Minas Gerais': layer_PrincipaiscursosdguadeMinasGerais_4,'Lavra autorizada (SIGMINE-2021)<br /><table><tr><td style="text-align: center;"><img src="legend/LavraautorizadaSIGMINE2021_3_Antesde19500.png" /></td><td>Antes de 1950</td></tr><tr><td style="text-align: center;"><img src="legend/LavraautorizadaSIGMINE2021_3_Décadade19501.png" /></td><td>Década de 1950</td></tr><tr><td style="text-align: center;"><img src="legend/LavraautorizadaSIGMINE2021_3_Décadade19602.png" /></td><td>Década de 1960</td></tr><tr><td style="text-align: center;"><img src="legend/LavraautorizadaSIGMINE2021_3_Décadade19703.png" /></td><td>Década de 1970</td></tr><tr><td style="text-align: center;"><img src="legend/LavraautorizadaSIGMINE2021_3_Décadade19804.png" /></td><td>Década de 1980</td></tr><tr><td style="text-align: center;"><img src="legend/LavraautorizadaSIGMINE2021_3_Décadade19905.png" /></td><td>Década de 1990</td></tr><tr><td style="text-align: center;"><img src="legend/LavraautorizadaSIGMINE2021_3_Décadade20006.png" /></td><td>Década de 2000</td></tr><tr><td style="text-align: center;"><img src="legend/LavraautorizadaSIGMINE2021_3_Décadade20107.png" /></td><td>Década de 2010</td></tr></table>': layer_LavraautorizadaSIGMINE2021_3,'Requerimento de exploração (SIGMINE-2021)<br /><table><tr><td style="text-align: center;"><img src="legend/RequerimentodeexploraoSIGMINE2021_2_Antesde19600.png" /></td><td>Antes de 1960</td></tr><tr><td style="text-align: center;"><img src="legend/RequerimentodeexploraoSIGMINE2021_2_De1960a19801.png" /></td><td>De 1960 a 1980</td></tr><tr><td style="text-align: center;"><img src="legend/RequerimentodeexploraoSIGMINE2021_2_De1980a20002.png" /></td><td>De 1980 a 2000</td></tr><tr><td style="text-align: center;"><img src="legend/RequerimentodeexploraoSIGMINE2021_2_De2000a20203.png" /></td><td>De 2000 a 2020</td></tr><tr><td style="text-align: center;"><img src="legend/RequerimentodeexploraoSIGMINE2021_2_De2020a20214.png" /></td><td>De 2020 a 2021</td></tr></table>': layer_RequerimentodeexploraoSIGMINE2021_2,'Processos de pesquisa (SIGMINE-2021)<br /><table><tr><td style="text-align: center;"><img src="legend/ProcessosdepesquisaSIGMINE2021_1_193519750.png" /></td><td>1935 - 1975</td></tr><tr><td style="text-align: center;"><img src="legend/ProcessosdepesquisaSIGMINE2021_1_197519981.png" /></td><td>1975 - 1998</td></tr><tr><td style="text-align: center;"><img src="legend/ProcessosdepesquisaSIGMINE2021_1_199820072.png" /></td><td>1998 - 2007</td></tr><tr><td style="text-align: center;"><img src="legend/ProcessosdepesquisaSIGMINE2021_1_200720123.png" /></td><td>2007 - 2012</td></tr><tr><td style="text-align: center;"><img src="legend/ProcessosdepesquisaSIGMINE2021_1_201220174.png" /></td><td>2012 - 2017</td></tr><tr><td style="text-align: center;"><img src="legend/ProcessosdepesquisaSIGMINE2021_1_201720215.png" /></td><td>2017 - 2021</td></tr></table>': layer_ProcessosdepesquisaSIGMINE2021_1,"Voyager": layer_Voyager_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
